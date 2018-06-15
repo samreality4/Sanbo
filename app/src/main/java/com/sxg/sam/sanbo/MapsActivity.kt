@@ -2,6 +2,10 @@ package com.sxg.sam.sanbo
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.Places.getGeoDataClient
+import com.google.android.gms.location.places.Places.getPlaceDetectionClient
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -12,6 +16,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+
+
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +27,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
+
+            // Construct a GeoDataClient.
+            mGeoDataClient = getGeoDataClient(this);
+
+            // Construct a PlaceDetectionClient.
+            mPlaceDetectionClient = getPlaceDetectionClient(this);
+
+            // Construct a FusedLocationProviderClient.
+            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
     /**
@@ -40,4 +58,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
+
+
 }
+}
+
+
+//find restaurants that are nearby you right now and at your current location.
