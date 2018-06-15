@@ -71,40 +71,6 @@ abstract class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-
-
-    private void getDeviceLocation(){
-        /*
-     * Get the best and most recent location of the device, which may be null in rare
-     * cases when a location is not available.
-     */
-        try {
-            if (mLocationPermissionGranted) {
-                val locationResult = mFusedLocationProviderClient.getLastLocation()
-                locationResult.addOnCompleteListener(this, object : OnCompleteListener {
-                    fun onComplete(task: Task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult()
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM))
-                        } else {
-                            Log.d(FragmentActivity.TAG, "Current location is null. Using defaults.")
-                            Log.e(FragmentActivity.TAG, "Exception: %s", task.getException())
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM))
-                            mMap.uiSettings.isMyLocationButtonEnabled = false
-                        }
-                    }
-                })
-            }
-        } catch (e: SecurityException) {
-
-        }
-
-
-    }
-
 }
 
 
