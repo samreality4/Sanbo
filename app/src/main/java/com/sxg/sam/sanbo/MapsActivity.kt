@@ -1,12 +1,20 @@
 package com.sxg.sam.sanbo
 
 import android.content.pm.PackageManager
+import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.checkSelfPermission
+import android.widget.Button
+import android.widget.Toast
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.GeoDataClient
+import com.google.android.gms.location.places.PlaceDetectionClient
 import com.google.android.gms.location.places.Places.getGeoDataClient
 import com.google.android.gms.location.places.Places.getPlaceDetectionClient
 
@@ -16,19 +24,29 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import jdk.nashorn.internal.runtime.ECMAException.getException
-import android.support.test.orchestrator.junit.BundleJUnitUtils.getResult
-import org.junit.experimental.results.ResultMatchers.isSuccessful
-import android.support.annotation.NonNull
-import android.support.v4.app.FragmentActivity
-import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+import kotlinx.android.synthetic.main.activity_maps.*
+import java.security.Permissions
 
 
-abstract class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
-   private var mLocationPermissionGranted : Boolean = false
+    //var API_KEY = resources.getString(R.string.apikey);
+
+    var resultlocation: Location = Location("")
+
+    private var currentlatitude : Double = 0.0
+
+    private var currentLongitude : Double = 0.0
+
+    var mLocationPermissionGranted : Boolean = false
+
+    private lateinit var geoDataClient: GeoDataClient
+
+    private lateinit var placeDetectionClient: PlaceDetectionClient
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+
 
     private lateinit var mMap: GoogleMap
 
@@ -40,15 +58,55 @@ abstract class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
         // Construct a GeoDataClient.
-        getGeoDataClient(this);
+        getGeoDataClient(this)
 
         // Construct a PlaceDetectionClient.
-        getPlaceDetectionClient(this);
+        getPlaceDetectionClient(this)
 
         // Construct a FusedLocationProviderClient.
-        LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+
+        if (checkSelfPermission(this, "android.permission.ACCESS_FINE_LOCATION")
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            // Show rationale and request permission.
+        }
+
+
+
+        fab.setOnClickListener { view ->
+
+            fusedLocationClient.lastLocation.addOnSuccessListener {  location : Location? ->
+
+
+                if (location != null) {
+                    currentlatitude = location.latitude
+                }
+                if(location != null){
+                    currentLongitude = location.longitude
+                }
+            }
+
+
+
+            val currentPosition = LatLng (currentlatitude, currentLongitude)
+
+
+            Snackbar.make(view, currentlatitude.toString(), Snackbar.LENGTH_SHORT).show()
+
+
+            mMap.addMarker(MarkerOptions().position(currentPosition).title("I am here"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
+        }
+
+
+
+
+
 
     }
 
@@ -69,6 +127,15 @@ abstract class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
+    }
+
+    fun getLocationPermission(){
+        if(ContextCompat.checkSelfPermission(applicationContext,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)==
+                PackageManager.PERMISSION_GRANTED){
+            mLocationPermissionGranted = true;
+        } else {
+        }
     }
 
 }
