@@ -16,9 +16,18 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue 'string', "api_key", MyAwesomeApp_ApiKey
+            buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey
+
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue 'string', "api_key", MyAwesomeApp_ApiKey
+            buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey
         }
     }
 }
