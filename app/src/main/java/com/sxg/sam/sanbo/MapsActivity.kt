@@ -30,13 +30,22 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Tasks
+import com.sxg.sam.sanbo.Model.ResultData
+import com.sxg.sam.sanbo.Model.YelpData
+import com.sxg.sam.sanbo.Remote.APIService
+import com.sxg.sam.sanbo.Remote.ApiClient
 import kotlinx.android.synthetic.main.activity_maps.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.security.Permissions
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //var API_KEY = resources.getString(R.string.apikey);
+
+    val apiKey:String = BuildConfig.YelpApiKey
 
     var resultlocation: Location = Location("")
 
@@ -107,6 +116,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         }
+
+        var apiService : APIService = ApiClient.getClient().create(APIService::class.java)
+        var call : Call<ResultData> = apiService.getYelpData(apiKey)
+        call.enqueue(object : Callback<ResultData>{
+            override fun onResponse(call: Call<ResultData>?, response: Response<ResultData>?) {
+                var yelpList: List<YelpData> = response?.body()?.results!!
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
 
     }
 

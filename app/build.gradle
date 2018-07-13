@@ -19,14 +19,16 @@ android {
         debug{
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue 'string', "api_key", MyAwesomeApp_ApiKey
+            resValue 'String', "api_key", MyAwesomeApp_ApiKey
+            resValue 'String', "yelp_api_key", Yelp_ApiKey
             buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey
+            buildConfigField 'String', "YelpApiKey", Yelp_ApiKey
 
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue 'string', "api_key", MyAwesomeApp_ApiKey
+            resValue 'String', "api_key", MyAwesomeApp_ApiKey
             buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey
         }
     }
@@ -38,7 +40,17 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.google.android.gms:play-services:12.0.1'
+    //retrofit2
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.0.0'
+
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

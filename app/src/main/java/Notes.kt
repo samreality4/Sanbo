@@ -8,3 +8,4 @@
 // put the following build gradle module to access api from anywhere
 /*resValue 'string', "api_key", MyAwesomeApp_ApiKey
 buildConfigField 'String', "ApiKey", MyAwesomeApp_ApiKey*/
+//To reference java classes APIService::class.java
